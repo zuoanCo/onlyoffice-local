@@ -1,0 +1,31 @@
+{
+  "name": "@onlyoffice-local/vanilla",
+  "version": "0.1.0",
+  "description": "Vanilla JS entry point for @onlyoffice-local/core - local OnlyOffice editing with no framework.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "files": ["dist", "README.md"],
+  "keywords": ["onlyoffice", "docx", "xlsx", "pptx", "vanilla", "offline", "editor"],
+  "dependencies": { "@onlyoffice-local/core": "0.1.0" },
+  "scripts": {
+    "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:types",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:types": "tsc -p tsconfig.types.json",
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": { "jsdom": "^25.0.1", "typescript": "^5.6.0", "vitest": "^2.1.8" }
+}

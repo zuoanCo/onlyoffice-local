@@ -1,0 +1,8 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist/esm",
+    "experimentalDecorators": true
+  },
+  "include": ["src/**/*.ts", "src/**/*.vue", "test/**/*.ts"]
+}
