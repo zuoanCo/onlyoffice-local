@@ -141,10 +141,10 @@ export class OnlyOfficeLocalComponent implements OnChanges, OnDestroy {
       this.loading = false
       this.documentReady.emit()
     }))
-    this.zone.run(() => instance.on('stateChange', (m) => this.stateChange.emit(m)))
+    this.zone.run(() => instance.on('stateChange', (m: boolean) => this.stateChange.emit(m)))
     this.zone.run(() => instance.on('requestClose', () => this.requestClose.emit()))
-    this.zone.run(() => instance.on('metaChange', (t) => this.metaChange.emit(t)))
-    this.zone.run(() => instance.on('error', (err) => {
+    this.zone.run(() => instance.on('metaChange', (t: string) => this.metaChange.emit(t)))
+    this.zone.run(() => instance.on('error', (err: Error) => {
       this.error = err
       this.loading = false
       this.errorEvent.emit(err)

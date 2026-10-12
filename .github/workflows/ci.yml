@@ -22,14 +22,16 @@ jobs:
       - name: Install
         run: npm ci
 
+      # Workspace packages resolve through their published dist/ entries, so
+      # the libraries have to be built before anything typechecks or imports them.
+      - name: Build
+        run: npm run build
+
       - name: Typecheck
         run: npm run typecheck
 
       - name: Test
         run: npm test
-
-      - name: Build
-        run: npm run build
 
       - name: Upload build output
         uses: actions/upload-artifact@v4
