@@ -19,7 +19,9 @@ export function mount(root: HTMLElement): void {
   root.innerHTML = `
     <header class="topbar">
       <h1>onlyoffice-local</h1>
-      <p>Local OnlyOffice editing, once per framework.</p>
+      <p>One zero-dependency core &middot; Vue 2 &amp; 3 &middot; React &middot; Angular &middot; vanilla JS</p>
+      <p class="tagline">Edit DOCX, XLSX and PPTX entirely in the browser. No document server, no uploads.
+        This page itself is built with the vanilla adapter &mdash; no framework loaded.</p>
     </header>
 
     <nav class="snips" role="tablist">
@@ -72,17 +74,31 @@ export function mount(root: HTMLElement): void {
     overlay.hidden = false
   }
 
-  function open(sampleFile: string, fileName?: string, blob?: Blob): void {
+  async function open(sampleFile: string, fileName?: string, blob?: Blob): Promise<void> {
     current = sampleFile
     showOverlay('Loading the OnlyOffice kernel…')
     setStatus('loading', 'Loading')
 
+    let payload: Blob
+    if (blob) {
+      payload = blob
+    } else {
+      // Fetch the sample into memory first. The core deliberately refuses a
+      // bare relative path - it only accepts http(s)/blob:/data: URLs, a File,
+      // a Blob or raw bytes - so resolve it here and hand over a File.
+      const url = new URL(`samples/${sampleFile}`, window.location.href).href
+      const res = await fetch(url)
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText} fetching ${url}`)
+      payload = await res.blob()
+    }
+
     handle?.destroy()
     handle = createOnlyOfficeLocal({
       container: stage,
-      document: blob ?? `/samples/${sampleFile}`,
+      document: new File([payload], fileName ?? sampleFile, { type: payload.type }),
       title: fileName ?? sampleFile,
-      baseUrl: '/',
+      // DocsAPI assets are served from the domain root, not from this sub-path.
+      baseUrl: new URL('/', window.location.href).href.replace(/\/$/, ''),
       mode: 'edit',
       lang: 'en-US',
     })
@@ -103,13 +119,21 @@ export function mount(root: HTMLElement): void {
       root.querySelectorAll('[data-sample]').forEach((b) => b.setAttribute('aria-selected', 'false'))
       btn.setAttribute('aria-selected', 'true')
       const sample = SAMPLES.find((s) => s.id === btn.dataset.sample)!
-      open(sample.file)
+      void open(sample.file).catch((err: Error) => {
+        showOverlay(err.message, true)
+        setStatus('error', 'Failed')
+      })
     })
   })
 
   fileInput.addEventListener('change', () => {
     const file = fileInput.files?.[0]
-    if (file) open(file.name, file.name, file)
+    if (file) {
+      void open(file.name, file.name, file).catch((err: Error) => {
+        showOverlay(err.message, true)
+        setStatus('error', 'Failed')
+      })
+    }
   })
 
   saveBtn.addEventListener('click', () => {

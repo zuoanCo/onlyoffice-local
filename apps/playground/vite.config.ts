@@ -2,6 +2,10 @@ import { defineConfig } from 'vite'
 import { resolve } from 'node:path'
 
 export default defineConfig({
+  // The demo is served from https://onlyoffice.zkhi.top/oolocal/, so assets
+  // must be referenced relatively. Override with PLAYGROUND_BASE when
+  // deploying somewhere else (or to the domain root with PLAYGROUND_BASE=/).
+  base: process.env.PLAYGROUND_BASE ?? '/',
   // Build against the adapter source so the playground reflects edits without
   // a separate library build.
   resolve: {

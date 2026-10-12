@@ -18,6 +18,7 @@ body { margin: 0; background: var(--paper); color: var(--ink); }
 .topbar { padding: 1.5rem 2rem 1rem; border-bottom: 1px solid var(--rule); }
 .topbar h1 { margin: 0; font-size: 1.25rem; font-weight: 600; letter-spacing: -0.01em; }
 .topbar p { margin: 0.25rem 0 0; color: var(--ink-2); font-size: 0.875rem; }
+.topbar .tagline { max-width: 68ch; color: var(--ink-3); }
 
 .snips { display: flex; gap: 0; padding: 0 2rem; border-bottom: 1px solid var(--rule); }
 .snips button, .tabs button {

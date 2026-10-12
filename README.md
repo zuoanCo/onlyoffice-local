@@ -13,6 +13,17 @@ One framework-agnostic core, thin adapters for the stacks people actually use.
 @onlyoffice-local/angular    Angular 17+, standalone component + service
 ```
 
+## Live demo
+
+**[onlyoffice.zkhi.top/oolocal](https://onlyoffice.zkhi.top/oolocal/)**
+
+The playground, running the vanilla adapter with the real OnlyOffice 9.x
+offline build behind it. Tabs across the top show the same integration in each
+supported framework.
+
+> Serve the playground with `npm run build`, which builds with
+> `--base=/oolocal/`. `npm run build:root` builds it for the domain root.
+
 ## Why it works without a server
 
 The editor is the **OnlyOffice 9.x offline build** - a static asset tree served
