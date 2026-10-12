@@ -7,3 +7,10 @@ coverage
 .vscode
 .idea
 apps/playground/public/vendor
+
+# Never let tsc emit next to sources. A stray `tsc -p` without --noEmit once
+# wrote .js/.d.ts into packages/*/src/ and they got committed.
+packages/*/src/**/*.js
+packages/*/src/**/*.d.ts
+packages/*/src/**/*.js.map
+packages/*/src/**/*.d.ts.map
